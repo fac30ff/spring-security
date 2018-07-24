@@ -13,7 +13,7 @@ import security.jpa.UserRepository;
 
 import java.util.List;
 
-@Service
+//@Service
 public class SQLUserDetailsService implements UserDetailsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SQLUserDetailsService.class);

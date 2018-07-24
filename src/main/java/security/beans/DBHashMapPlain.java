@@ -3,6 +3,7 @@ package security.beans;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 import security.db.DBInterface;
 import security.db.DBRoles;
 
@@ -39,7 +40,7 @@ public class DBHashMapPlain implements DBInterface {
                 .withDefaultPasswordEncoder()
                 .username(entry.getKey())
                 .password(entry.getValue())
-                .roles(DBRoles.get())
+                .roles(DBRoles.getU())
                 .build();
     }
 

@@ -11,7 +11,7 @@ public class DBRoles {
     public static String USER="USER";
     public static String ADMIN="ADMIN";
 
-    public static String[] get() {
+    public static String[] getU() {
         return new String[]{USER};
     }
 
@@ -35,5 +35,4 @@ public class DBRoles {
             add(new SimpleGrantedAuthority(DBRoles.ADMIN));
         }};
     }
-
 }
