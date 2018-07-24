@@ -1,7 +1,10 @@
-package security.db;
+package security.beans;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import security.db.DBInterface;
+import security.db.DBRoles;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Configuration
 public class DBHashMapPlain implements DBInterface {
 
     private final HashMap<String, String> storage = new HashMap<>();
