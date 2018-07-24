@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import security.db.SQLUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -37,11 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public UserDetailsService userDetailsService () {
+/*
         return new InMemoryUserDetailsManager(
                 //new DBHashMapPlain().usersDetails() // plain storage
                 new DBHashMapEncrypted().usersDetails() // secure storage
         );
-        // return new SQLUserDetailsService(); // own implementation UserDetailsService based on SQL
+*/
+        return new SQLUserDetailsService(); // own implementation UserDetailsService based on SQL
     }
 
 /*
