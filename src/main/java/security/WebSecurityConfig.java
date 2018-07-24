@@ -155,10 +155,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService() {
     //protected UserDetailsService userDetailsService_inline() {
-        InMemoryUserDetailsManager m = new InMemoryUserDetailsManager();
-        m.createUser(User.withDefaultPasswordEncoder().username("u0").password("p0").roles(DBRoles.getU()).build());
-        m.createUser(User.withDefaultPasswordEncoder().username("a0").password("p0").roles(DBRoles.getU()).build());
-        return m;
+        return new InMemoryUserDetailsManager() {{
+            createUser(User.withDefaultPasswordEncoder().username("u0").password("p0").roles(DBRoles.getU()).build());
+            createUser(User.withDefaultPasswordEncoder().username("a0").password("p0").roles(DBRoles.getU()).build());
+        }};
     }
 
     /*
