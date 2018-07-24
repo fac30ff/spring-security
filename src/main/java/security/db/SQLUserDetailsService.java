@@ -20,11 +20,13 @@ public class SQLUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+/*
         for (UserDetails ud : hash.usersDetails()) {
             if (username.equals(ud.getUsername())) {
                 return new User(ud.getUsername(), ud.getPassword(), DBRoles.auth());
             }
         }
+*/
         throw new UsernameNotFoundException(String.format("User with login `%s` not found", username));
     }
 
