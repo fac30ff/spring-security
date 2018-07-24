@@ -130,7 +130,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //@Bean
     //@Override
-    public UserDetailsService userDetailsService_Plain () {
+    protected UserDetailsService userDetailsService_Plain () {
     //public UserDetailsService userDetailsService () {
         return new InMemoryUserDetailsManager(
                 new DBHashMapPlain().usersDetails() // plain storage
@@ -138,7 +138,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //@Override
-    public UserDetailsService userDetailsService_Secured () {
+    protected UserDetailsService userDetailsService_Secured () {
         return new InMemoryUserDetailsManager(
                 new DBHashMapEncrypted().usersDetails() // secure storage
         );
@@ -147,16 +147,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // own implementation UserDetailsService based on SQL
     //@Bean // or @Bean here or @Service at SQLUserDetailsService class
     //@Override
-    public UserDetailsService userDetailsService_SQL () {
+    protected UserDetailsService userDetailsService_SQL () {
         return new SQLUserDetailsService();
     }
 
-    //@Bean
-    //@Override
-    protected UserDetailsService userDetailsService_inline() {
+    @Bean
+    @Override
+    protected UserDetailsService userDetailsService() {
+    //protected UserDetailsService userDetailsService_inline() {
         InMemoryUserDetailsManager m = new InMemoryUserDetailsManager();
-        m.createUser(User.withDefaultPasswordEncoder().username("u0").password("u0").roles(DBRoles.getU()).build());
-        m.createUser(User.withDefaultPasswordEncoder().username("a0").password("a0").roles(DBRoles.getU()).build());
+        m.createUser(User.withDefaultPasswordEncoder().username("u0").password("p0").roles(DBRoles.getU()).build());
+        m.createUser(User.withDefaultPasswordEncoder().username("a0").password("p0").roles(DBRoles.getU()).build());
         return m;
     }
 
