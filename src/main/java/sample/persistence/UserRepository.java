@@ -1,4 +1,4 @@
-package security.jpa;
+package sample.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

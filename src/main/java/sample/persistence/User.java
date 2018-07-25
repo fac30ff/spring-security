@@ -1,4 +1,4 @@
-package security.jpa;
+package sample.persistence;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -33,28 +32,12 @@ public class User {
         setRoles(roles);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getPasswd() {
         return passwd;
-    }
-
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
     }
 
     public List<GrantedAuthority> getRoles() {
