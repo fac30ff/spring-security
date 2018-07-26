@@ -16,13 +16,17 @@ import java.util.stream.Collectors;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     private String login;
 
     private String passwd;
 
     private String roles;
+
+    public static User Empty() {
+        return new User("<not found>", "", new String[]{});
+    }
 
     protected User() { }
 
