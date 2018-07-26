@@ -42,22 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(
-                "/u/**",
-                //"/**",
-                new CorsConfiguration(){{
-                    //setAllowCredentials(true);
-                    //addAllowedHeader("*");
-                    addAllowedOrigin("http://localhost:3000");
-                    setAllowedMethods(Arrays.asList(HttpMethod.GET.name(), HttpMethod.POST.name()));
-                }});
-        return new CorsFilter(source);
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.
@@ -65,4 +49,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(new Pbkdf2PasswordEncoder());
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration(
+                "/u/**",
+                new CorsConfiguration(){{
+                    addAllowedHeader("*");
+                    addAllowedOrigin("http://localhost:3000");
+                    setAllowedMethods(Arrays.asList(
+                            HttpMethod.GET.name(),
+                            HttpMethod.POST.name()
+                    ));
+                }});
+        return new CorsFilter(source);
+    }
 }

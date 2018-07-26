@@ -1,5 +1,7 @@
 package sample.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -42,6 +44,14 @@ public class User {
 
     public String getPasswd() {
         return passwd;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 
     public List<GrantedAuthority> getRoles() {
