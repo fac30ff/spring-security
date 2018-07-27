@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class LoginController {
+public class AppController {
     private static String authorizationRequestBaseUri = "oauth2/authorization";
     private Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
@@ -40,5 +40,20 @@ public class LoginController {
         model.addAttribute("urls", oauth2AuthenticationUrls);
 
         return "oauth_login.html";
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        return "home.html";
+    }
+
+    @GetMapping("/hello")
+    public String hello(Model model) {
+        return "hello.html";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login.html";
     }
 }
