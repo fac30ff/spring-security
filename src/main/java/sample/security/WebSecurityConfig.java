@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 import java.util.Arrays;
 
 @EnableWebSecurity
@@ -51,12 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsFilter corsFilter() {
-
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration(
                 "/u/**",
                 new CorsConfiguration(){{
-                    addAllowedHeader("*");
+                    addAllowedHeader("*"); // for pre-flight request
                     addAllowedOrigin("http://localhost:3000");
                     setAllowedMethods(Arrays.asList(
                             HttpMethod.GET.name(),

@@ -1,9 +1,6 @@
 package sample.persistence;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +22,6 @@ public class User {
     private String passwd;
 
     private String roles;
-
-    public static User Empty() {
-        return new User("<not found>", "", new String[]{});
-    }
 
     protected User() { }
 

@@ -24,7 +24,7 @@ public class DataController {
 
     @GetMapping(value = "/{id}")
     public User get(@PathVariable Long id) {
-        return userRepository.findById(id).orElse(User.Empty());
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     @PostMapping(value = "/add")
