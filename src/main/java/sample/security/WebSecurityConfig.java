@@ -1,98 +1,69 @@
 package sample.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private SQLUserDetailsService sqlUserDetailsService;
+    private static final List<String> clients = Arrays.asList("google", "facebook");
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
-        http.cors().configurationSource(
-                new UrlBasedCorsConfigurationSource() {{
-                    registerCorsConfiguration(
-                            "/u/**",
-                            new CorsConfiguration() {{
-                                addAllowedHeader("*"); // for pre-flight request
-                                addAllowedOrigin("http://localhost:3000");
-                                setAllowedMethods(Arrays.asList(
-                                        HttpMethod.GET.name(),
-                                        HttpMethod.POST.name()
-                                ));
-                            }});
-                }}
-        );
-
         http.authorizeRequests()
-                .antMatchers("/u/**").permitAll()
-                .antMatchers("/", "/home", "/about", "/resources/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/api").permitAll()
-                .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+                .antMatchers("/oauth_login")
+                .permitAll()
                 .anyRequest().authenticated();
 
-        http.formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .failureUrl("/login?error")
-                //.failureForwardUrl()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                //.successHandler()
-                //.successForwardUrl()
-                //.defaultSuccessUrl()
-                //.authenticationDetailsSource()
-                .permitAll();
-
-        http.logout()
-                .logoutUrl("/login?logout")
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)
-                .addLogoutHandler((httpServletRequest, httpServletResponse, authentication) -> { })
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> { })
-                .clearAuthentication(true)
-                //.logoutRequestMatcher()
-                //.defaultLogoutSuccessHandlerFor()
-                .permitAll();
+        http.oauth2Login()
+                .loginPage("/oauth_login");
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.
-                userDetailsService(sqlUserDetailsService)
-                .passwordEncoder(new Pbkdf2PasswordEncoder());
+    private static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
+
+    @Autowired
+    private Environment env;
+
+    private ClientRegistration getRegistration(String client) {
+        String clientId = env.getProperty(
+                CLIENT_PROPERTY_KEY + client + ".client-id");
+
+        if (clientId == null) {
+            return null;
+        }
+
+        String clientSecret = env.getProperty(
+                CLIENT_PROPERTY_KEY + client + ".client-secret");
+
+        if (client.equals("google")) {
+            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+                    .clientId(clientId).clientSecret(clientSecret).build();
+        }
+        if (client.equals("facebook")) {
+            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+                    .clientId(clientId).clientSecret(clientSecret).build();
+        }
+        return null;
     }
 
-/*
     @Bean
-    public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(
-                "/u/**",
-                new CorsConfiguration(){{
-                    addAllowedHeader("*"); // for pre-flight request
-                    addAllowedOrigin("http://localhost:3000");
-                    setAllowedMethods(Arrays.asList(
-                            HttpMethod.GET.name(),
-                            HttpMethod.POST.name()
-                    ));
-                }});
-        return new CorsFilter(source);
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        List<ClientRegistration> registrations = clients.stream()
+                .map(c -> getRegistration(c))
+                .filter(registration -> registration != null)
+                .collect(Collectors.toList());
+
+        return new InMemoryClientRegistrationRepository(registrations);
     }
-*/
 }
